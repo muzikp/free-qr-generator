@@ -10,7 +10,7 @@ const languageButtons = document.querySelectorAll('.language-button');
 const translations = {
   cs: {
     title: 'QR Studio — QR kód z odkazu', description: 'Vytvořte QR kód z URL a stáhněte ho jako PNG nebo SVG. Zdarma a bez registrace.',
-    brandLabel: 'QR Studio – úvodní stránka', headerNote: 'Zdarma & bez registrace', eyebrow: 'TVŮJ ODKAZ, TVŮJ KÓD',
+    brandLabel: 'QR Studio – úvodní stránka', headerNote: 'Bez registrace, cookies a poplatků', eyebrow: 'TVŮJ ODKAZ, TVŮJ KÓD',
     heroFirst: 'Z odkazu na ', heroEmphasis: 'QR kód.', heroSecond: 'Za pár vteřin.',
     heroCopy: 'Vlož URL adresu, vygeneruj kód a stáhni si ho v kvalitě, kterou potřebuješ. Bez přihlášení a bez zbytečností.',
     generatorLabel: 'Generátor QR kódu', stepOne: 'VLOŽ ODKAZ', formHeading: 'Kam má QR kód vést?',
@@ -30,7 +30,7 @@ const translations = {
   },
   en: {
     title: 'QR Studio — QR code from a link', description: 'Create a QR code from a URL and download it as PNG or SVG. Free, no sign-up required.',
-    brandLabel: 'QR Studio – home', headerNote: 'Free & no sign-up', eyebrow: 'YOUR LINK, YOUR CODE',
+    brandLabel: 'QR Studio – home', headerNote: 'No sign-up, cookies or fees', eyebrow: 'YOUR LINK, YOUR CODE',
     heroFirst: 'Turn a link into a ', heroEmphasis: 'QR code.', heroSecond: 'In seconds.',
     heroCopy: 'Paste a URL, generate a code and download it in the format you need. No account, no fuss.',
     generatorLabel: 'QR code generator', stepOne: 'PASTE A LINK', formHeading: 'Where should your QR code lead?',
