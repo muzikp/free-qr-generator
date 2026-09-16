@@ -5,6 +5,8 @@ const preview = document.getElementById('preview');
 const badge = document.getElementById('result-badge');
 const pngButton = document.getElementById('download-png');
 const svgButton = document.getElementById('download-svg');
+const copyButton = document.getElementById('copy-png');
+const copyMessage = document.getElementById('copy-message');
 const foregroundInput = document.getElementById('foreground-color');
 const backgroundInput = document.getElementById('background-color');
 const foregroundValue = document.getElementById('foreground-value');
@@ -24,7 +26,10 @@ const translations = {
     colorsHeading: 'BARVY QR KÓDU', foregroundLabel: 'Čtverečky', backgroundLabel: 'Pozadí',
     colorHint: 'Pro snadné načtení zvol kontrastní barvy.', lowContrast: 'Tyto barvy mohou zhoršit čitelnost QR kódu.',
     privacy: 'Tvůj odkaz se zpracuje přímo v prohlížeči.', stepTwo: 'TVŮJ QR KÓD', previewLabel: 'Náhled QR kódu',
-    emptyState: 'Tady se objeví tvůj QR kód', downloadAs: 'STÁHNOUT JAKO',
+    emptyState: 'Tady se objeví tvůj QR kód', downloadAs: 'STÁHNOUT JAKO', copyImage: 'Kopírovat obrázek',
+    copied: 'Obrázek je zkopírovaný do schránky.',
+    copyUnavailable: 'Kopírování obrázků vyžaduje HTTPS a podporovaný prohlížeč.',
+    copyError: 'Obrázek se nepodařilo zkopírovat. Zkus stažení PNG.',
     formatNote: 'PNG pro běžné použití · SVG pro tisk a škálování',
     ready: 'PŘIPRAVENO', done: 'HOTOVO', qrLabel: 'QR kód',
     missingUrl: 'Zadej URL adresu.', invalidUrl: 'Zadej platnou URL adresu.',
@@ -45,7 +50,10 @@ const translations = {
     colorsHeading: 'QR CODE COLORS', foregroundLabel: 'Squares', backgroundLabel: 'Background',
     colorHint: 'Choose contrasting colors for easy scanning.', lowContrast: 'These colors may make the QR code harder to scan.',
     privacy: 'Your link is processed directly in your browser.', stepTwo: 'YOUR QR CODE', previewLabel: 'QR code preview',
-    emptyState: 'Your QR code will appear here', downloadAs: 'DOWNLOAD AS',
+    emptyState: 'Your QR code will appear here', downloadAs: 'DOWNLOAD AS', copyImage: 'Copy image',
+    copied: 'Image copied to clipboard.',
+    copyUnavailable: 'Copying images requires HTTPS and a supported browser.',
+    copyError: 'Could not copy the image. Try downloading the PNG instead.',
     formatNote: 'PNG for everyday use · SVG for print and scaling',
     ready: 'READY', done: 'DONE', qrLabel: 'QR code',
     missingUrl: 'Enter a URL address.', invalidUrl: 'Enter a valid URL address.',
@@ -61,6 +69,7 @@ let currentQr = null;
 let currentSvg = '';
 let language = 'cs';
 let messageKey = '';
+let copyMessageKey = '';
 let colorWarning = false;
 
 function t(key) { return translations[language][key]; }
@@ -83,6 +92,7 @@ function setLanguage(nextLanguage) {
   if (emptyLabel) emptyLabel.textContent = t('emptyState');
   if (currentQr) preview.querySelector('svg').setAttribute('aria-label', t('qrLabel'));
   message.textContent = messageKey ? t(messageKey) : '';
+  copyMessage.textContent = copyMessageKey ? t(copyMessageKey) : '';
   colorHint.textContent = t(colorWarning ? 'lowContrast' : 'colorHint');
   try { localStorage.setItem('qr-studio-language', language); } catch { /* Storage may be disabled. */ }
 }
@@ -148,6 +158,7 @@ function updateColors() {
   if (currentQr) {
     currentSvg = svgFromQr(currentQr);
     preview.innerHTML = currentSvg;
+    setCopyMessage('');
   }
 }
 
@@ -164,11 +175,19 @@ function setMessage(key, isError = false) {
   input.setAttribute('aria-invalid', String(isError));
 }
 
+function setCopyMessage(key, isError = false) {
+  copyMessageKey = key;
+  copyMessage.textContent = key ? t(key) : '';
+  copyMessage.classList.toggle('is-error', isError);
+}
+
 function clearResult() {
   currentQr = null;
   currentSvg = '';
   pngButton.disabled = true;
   svgButton.disabled = true;
+  copyButton.disabled = true;
+  setCopyMessage('');
   badge.textContent = t('ready');
   badge.classList.remove('is-ready');
   preview.innerHTML = '<div id="empty-state" class="empty-state"><div class="empty-qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><p>Tady se objeví tvůj QR kód</p></div>';
@@ -205,6 +224,7 @@ form.addEventListener('submit', (event) => {
     input.value = url;
     pngButton.disabled = false;
     svgButton.disabled = false;
+    copyButton.disabled = false;
     badge.textContent = t('done');
     badge.classList.add('is-ready');
     setMessage('success');
@@ -224,28 +244,59 @@ svgButton.addEventListener('click', () => {
   downloadBlob(new Blob([currentSvg], { type: 'image/svg+xml;charset=utf-8' }), 'qr-kod.svg');
 });
 
-pngButton.addEventListener('click', () => {
-  if (!currentQr) return;
-  const modules = currentQr.getModuleCount();
+function pngCanvasFromQr(qr) {
+  const modules = qr.getModuleCount();
   const margin = 4;
   const cellSize = Math.max(8, Math.floor(1024 / (modules + margin * 2)));
   const canvas = document.createElement('canvas');
   canvas.width = canvas.height = (modules + margin * 2) * cellSize;
   const context = canvas.getContext('2d');
-  if (!context) {
-    setMessage('pngError', true);
-    return;
-  }
+  if (!context) return null;
   context.fillStyle = backgroundInput.value;
   context.fillRect(0, 0, canvas.width, canvas.height);
   context.fillStyle = foregroundInput.value;
   for (let y = 0; y < modules; y++) {
     for (let x = 0; x < modules; x++) {
-      if (currentQr.isDark(y, x)) context.fillRect((x + margin) * cellSize, (y + margin) * cellSize, cellSize, cellSize);
+      if (qr.isDark(y, x)) context.fillRect((x + margin) * cellSize, (y + margin) * cellSize, cellSize, cellSize);
     }
+  }
+  return canvas;
+}
+
+pngButton.addEventListener('click', () => {
+  if (!currentQr) return;
+  const canvas = pngCanvasFromQr(currentQr);
+  if (!canvas) {
+    setMessage('pngError', true);
+    return;
   }
   canvas.toBlob((blob) => {
     if (blob) downloadBlob(blob, 'qr-kod.png');
     else setMessage('pngError', true);
   }, 'image/png');
+});
+
+copyButton.addEventListener('click', async () => {
+  if (!currentQr) return;
+  if (!window.isSecureContext || !navigator.clipboard?.write || typeof ClipboardItem === 'undefined' ||
+      ClipboardItem.supports?.('image/png') === false) {
+    setCopyMessage('copyUnavailable', true);
+    return;
+  }
+
+  const canvas = pngCanvasFromQr(currentQr);
+  if (!canvas) {
+    setCopyMessage('copyError', true);
+    return;
+  }
+
+  try {
+    const png = new Promise((resolve, reject) => {
+      canvas.toBlob((blob) => blob ? resolve(blob) : reject(new Error('PNG unavailable')), 'image/png');
+    });
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': png })]);
+    setCopyMessage('copied');
+  } catch {
+    setCopyMessage('copyError', true);
+  }
 });

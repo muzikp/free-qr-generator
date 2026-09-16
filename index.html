@@ -90,7 +90,12 @@
                 <button id="download-png" class="download-button" type="button" disabled><span>PNG</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
                 <button id="download-svg" class="download-button" type="button" disabled><span>SVG</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
               </div>
+              <button id="copy-png" class="copy-button" type="button" disabled>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="8" y="8" width="12" height="12" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+                <span data-i18n="copyImage">Kopírovat obrázek</span>
+              </button>
               <p class="format-note" data-i18n="formatNote">PNG pro běžné použití · SVG pro tisk a škálování</p>
+              <p id="copy-message" class="copy-message" role="status" aria-live="polite"></p>
             </div>
           </div>
         </section>
