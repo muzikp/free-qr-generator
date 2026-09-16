@@ -10,8 +10,8 @@ const languageButtons = document.querySelectorAll('.language-button');
 const translations = {
   cs: {
     title: 'QR Studio — QR kód z odkazu', description: 'Vytvořte QR kód z URL a stáhněte ho jako PNG nebo SVG. Zdarma a bez registrace.',
-    brandLabel: 'QR Studio – úvodní stránka', headerNote: 'Bez registrace, cookies a poplatků', eyebrow: 'TVŮJ ODKAZ, TVŮJ KÓD',
-    heroFirst: 'Z odkazu na ', heroEmphasis: 'QR kód.', heroSecond: 'Za pár vteřin.',
+    brandLabel: 'QR Studio – úvodní stránka', headerNote: 'Bez registrace, cookies a poplatků',
+    heroFirst: 'URL', heroEmphasis: 'QR zdarma',
     heroCopy: 'Vlož URL adresu, vygeneruj kód a stáhni si ho v kvalitě, kterou potřebuješ. Bez přihlášení a bez zbytečností.',
     generatorLabel: 'Generátor QR kódu', stepOne: 'VLOŽ ODKAZ', formHeading: 'Kam má QR kód vést?',
     formCopy: 'Zadej adresu webu, kterou chceš sdílet.', urlLabel: 'URL adresa', urlPlaceholder: 'např. https://moje-stranka.cz',
@@ -19,7 +19,6 @@ const translations = {
     privacy: 'Tvůj odkaz se zpracuje přímo v prohlížeči.', stepTwo: 'TVŮJ QR KÓD', previewLabel: 'Náhled QR kódu',
     emptyState: 'Tady se objeví tvůj QR kód', downloadAs: 'STÁHNOUT JAKO',
     formatNote: 'PNG pro běžné použití · SVG pro tisk a škálování',
-    footnote: 'Jednoduchý nástroj pro odkazy, které stojí za sdílení.', footerTagline: 'Vytvořeno s jednoduchostí na mysli.',
     ready: 'PŘIPRAVENO', done: 'HOTOVO', qrLabel: 'QR kód',
     missingUrl: 'Zadej URL adresu.', invalidUrl: 'Zadej platnou URL adresu.',
     invalidProtocol: 'Zadej platnou webovou adresu začínající http:// nebo https://.',
@@ -30,8 +29,8 @@ const translations = {
   },
   en: {
     title: 'QR Studio — QR code from a link', description: 'Create a QR code from a URL and download it as PNG or SVG. Free, no sign-up required.',
-    brandLabel: 'QR Studio – home', headerNote: 'No sign-up, cookies or fees', eyebrow: 'YOUR LINK, YOUR CODE',
-    heroFirst: 'Turn a link into a ', heroEmphasis: 'QR code.', heroSecond: 'In seconds.',
+    brandLabel: 'QR Studio – home', headerNote: 'No sign-up, cookies or fees',
+    heroFirst: 'Free URL', heroEmphasis: 'QR',
     heroCopy: 'Paste a URL, generate a code and download it in the format you need. No account, no fuss.',
     generatorLabel: 'QR code generator', stepOne: 'PASTE A LINK', formHeading: 'Where should your QR code lead?',
     formCopy: 'Enter the website address you want to share.', urlLabel: 'URL address', urlPlaceholder: 'e.g. https://your-website.com',
@@ -39,7 +38,6 @@ const translations = {
     privacy: 'Your link is processed directly in your browser.', stepTwo: 'YOUR QR CODE', previewLabel: 'QR code preview',
     emptyState: 'Your QR code will appear here', downloadAs: 'DOWNLOAD AS',
     formatNote: 'PNG for everyday use · SVG for print and scaling',
-    footnote: 'A simple tool for links worth sharing.', footerTagline: 'Made with simplicity in mind.',
     ready: 'READY', done: 'DONE', qrLabel: 'QR code',
     missingUrl: 'Enter a URL address.', invalidUrl: 'Enter a valid URL address.',
     invalidProtocol: 'Enter a website address starting with http:// or https://.',
