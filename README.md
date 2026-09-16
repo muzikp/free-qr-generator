@@ -10,8 +10,6 @@ Rozhraní lze přepnout mezi češtinou a angličtinou tlačítky v hlavičce. V
 
 ## Nasazení na GitHub Pages
 
-1. Nahrajte větev `main` do repozitáře na GitHubu.
-2. V **Settings → Pages → Build and deployment** vyberte **Deploy from a branch**, větev `main` a složku `/ (root)`.
-3. V **Settings → Pages → Custom domain** zadejte `qr.evalytics.cz` a uložte. Soubor `CNAME` je již připraven v kořeni projektu.
-4. U správce DNS vytvořte záznam `CNAME` pro `qr`, který míří na `<vlastník>.github.io` (bez názvu repozitáře). Konkrétního vlastníka doplňte podle účtu nebo organizace, kam repozitář nahrajete.
-5. Po ověření DNS v nastavení Pages zapněte **Enforce HTTPS**.
+Publikování je nastavené z větve `main` a složky `/ (root)` v repozitáři `muzikp/free-qr-generator`. Vlastní doména v GitHub Pages je `qr.evalytics.cz`.
+
+U správce DNS vytvořte záznam `CNAME` s názvem `qr` a cílem `muzikp.github.io` (bez názvu repozitáře). Po ověření DNS a vystavení certifikátu zapněte v **Settings → Pages** možnost **Enforce HTTPS**.
