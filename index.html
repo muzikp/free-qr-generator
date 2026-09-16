@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="cs">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f6f5f1" />
+    <meta name="description" content="Vytvořte QR kód z URL a stáhněte ho jako PNG nebo SVG. Zdarma a bez registrace." />
+    <title>QR Studio — QR kód z odkazu</title>
+    <link rel="stylesheet" href="styles.css" />
+    <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@2.0.4/dist/qrcode.min.js" defer></script>
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="site-header">
+        <a class="brand" href="./" aria-label="QR Studio – úvodní stránka" data-i18n-aria="brandLabel">
+          <span class="brand-mark" aria-hidden="true"><span></span><span></span><span></span><span></span></span>
+          <span>qr<span class="brand-light">studio</span><span class="brand-dot">.</span></span>
+        </a>
+        <div class="header-right">
+          <span class="header-note"><span class="status-dot"></span><span data-i18n="headerNote">Zdarma & bez registrace</span></span>
+          <div class="language-switch" role="group" aria-label="Jazyk / Language">
+            <button class="language-button is-active" type="button" data-lang="cs" aria-label="Čeština" aria-pressed="true" title="Čeština"><svg viewBox="0 0 32 20" aria-hidden="true"><rect width="32" height="20" fill="#fff"/><rect y="10" width="32" height="10" fill="#d7141a"/><path d="M0 0 15 10 0 20Z" fill="#11457e"/></svg></button>
+            <button class="language-button" type="button" data-lang="en" aria-label="English" aria-pressed="false" title="English"><svg viewBox="0 0 32 20" aria-hidden="true"><rect width="32" height="20" fill="#012169"/><path d="M0 0 32 20M32 0 0 20" stroke="#fff" stroke-width="5"/><path d="M0 0 32 20M32 0 0 20" stroke="#c8102e" stroke-width="2"/><path d="M16 0v20M0 10h32" stroke="#fff" stroke-width="7"/><path d="M16 0v20M0 10h32" stroke="#c8102e" stroke-width="3.5"/></svg></button>
+          </div>
+        </div>
+      </header>
+
+      <main>
+        <section class="hero" aria-labelledby="page-title">
+          <div class="eyebrow"><span class="eyebrow-line"></span><span data-i18n="eyebrow">TVŮJ ODKAZ, TVŮJ KÓD</span></div>
+          <h1 id="page-title"><span data-i18n="heroFirst">Z odkazu na </span><em data-i18n="heroEmphasis">QR kód.</em><br /><span data-i18n="heroSecond">Za pár vteřin.</span></h1>
+          <p class="hero-copy" data-i18n="heroCopy">Vlož URL adresu, vygeneruj kód a stáhni si ho v kvalitě, kterou potřebuješ. Bez přihlášení a bez zbytečností.</p>
+        </section>
+
+        <section class="generator" aria-label="Generátor QR kódu" data-i18n-aria="generatorLabel">
+          <div class="form-panel">
+            <div class="section-kicker"><span class="step-number">01</span><span data-i18n="stepOne">VLOŽ ODKAZ</span></div>
+            <h2 data-i18n="formHeading">Kam má QR kód vést?</h2>
+            <p class="panel-copy" data-i18n="formCopy">Zadej adresu webu, kterou chceš sdílet.</p>
+
+            <form id="qr-form" novalidate>
+              <label for="url-input" data-i18n="urlLabel">URL adresa</label>
+              <div class="input-wrap">
+                <span class="input-icon" aria-hidden="true">
+                  <svg viewBox="0 0 24 24" fill="none"><path d="M10 13a5 5 0 0 0 7.5.5l3-3a5 5 0 0 0-7.1-7.1l-1.7 1.7M14 11a5 5 0 0 0-7.5-.5l-3 3a5 5 0 0 0 7.1 7.1l1.7-1.7" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </span>
+                <input id="url-input" name="url" type="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="např. https://moje-stranka.cz" data-i18n-placeholder="urlPlaceholder" aria-describedby="input-hint form-message" required />
+              </div>
+              <p id="input-hint" class="input-hint" data-i18n="inputHint">Adresu můžeš zadat i bez https://</p>
+              <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+              <button class="generate-button" type="submit">
+                <span data-i18n="generate">Vygenerovat QR kód</span>
+                <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+            </form>
+
+            <div class="privacy-note">
+              <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><rect x="5" y="10" width="14" height="11" rx="2" stroke="currentColor" stroke-width="1.7"/><path d="M8 10V7a4 4 0 0 1 8 0v3" stroke="currentColor" stroke-width="1.7" stroke-linecap="round"/></svg>
+              <span data-i18n="privacy">Tvůj odkaz se zpracuje přímo v prohlížeči.</span>
+            </div>
+          </div>
+
+          <div class="result-panel">
+            <div class="result-topline"><span class="section-kicker"><span class="step-number">02</span><span data-i18n="stepTwo">TVŮJ QR KÓD</span></span><span id="result-badge" class="result-badge">PŘIPRAVENO</span></div>
+            <div id="preview" class="preview" aria-live="polite" aria-label="Náhled QR kódu" data-i18n-aria="previewLabel">
+              <div id="empty-state" class="empty-state">
+                <div class="empty-qr" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+                <p data-i18n="emptyState">Tady se objeví tvůj QR kód</p>
+              </div>
+            </div>
+            <div class="result-actions">
+              <p class="download-label" data-i18n="downloadAs">STÁHNOUT JAKO</p>
+              <div class="download-buttons">
+                <button id="download-png" class="download-button" type="button" disabled><span>PNG</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+                <button id="download-svg" class="download-button" type="button" disabled><span>SVG</span><svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M12 3v12m-4-4 4 4 4-4M4 17v3h16v-3" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+              </div>
+              <p class="format-note" data-i18n="formatNote">PNG pro běžné použití · SVG pro tisk a škálování</p>
+            </div>
+          </div>
+        </section>
+
+        <p class="footnote"><span class="footnote-sparkle">✳</span><span data-i18n="footnote">Jednoduchý nástroj pro odkazy, které stojí za sdílení.</span></p>
+      </main>
+
+      <footer class="site-footer"><span>© <span id="year"></span> Evalytics s.r.o.</span><span data-i18n="footerTagline">Vytvořeno s jednoduchostí na mysli.</span></footer>
+    </div>
+  </body>
+</html>
