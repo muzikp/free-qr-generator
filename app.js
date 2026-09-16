@@ -10,7 +10,7 @@ const languageButtons = document.querySelectorAll('.language-button');
 const translations = {
   cs: {
     title: 'QR Studio — QR kód z odkazu', description: 'Vytvořte QR kód z URL a stáhněte ho jako PNG nebo SVG. Zdarma a bez registrace.',
-    brandLabel: 'QR Studio – úvodní stránka', headerNote: 'Bez registrace, cookies a poplatků',
+    brandLabel: 'Evalytics QR Studio – úvodní stránka', headerNote: 'Bez registrace, cookies a poplatků',
     heroFirst: 'URL', heroEmphasis: 'QR zdarma',
     heroCopy: 'Vlož URL adresu, vygeneruj kód a stáhni si ho v kvalitě, kterou potřebuješ. Bez přihlášení a bez zbytečností.',
     generatorLabel: 'Generátor QR kódu', stepOne: 'VLOŽ ODKAZ', formHeading: 'Kam má QR kód vést?',
@@ -29,7 +29,7 @@ const translations = {
   },
   en: {
     title: 'QR Studio — QR code from a link', description: 'Create a QR code from a URL and download it as PNG or SVG. Free, no sign-up required.',
-    brandLabel: 'QR Studio – home', headerNote: 'No sign-up, cookies or fees',
+    brandLabel: 'Evalytics QR Studio – home', headerNote: 'No sign-up, cookies or fees',
     heroFirst: 'Free URL', heroEmphasis: 'QR',
     heroCopy: 'Paste a URL, generate a code and download it in the format you need. No account, no fuss.',
     generatorLabel: 'QR code generator', stepOne: 'PASTE A LINK', formHeading: 'Where should your QR code lead?',
@@ -114,7 +114,7 @@ function svgFromQr(qr) {
     }
   }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" role="img" aria-label="${t('qrLabel')}"><rect width="${size}" height="${size}" fill="#fff"/><path fill="#172c26" d="${parts.join('')}"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" role="img" aria-label="${t('qrLabel')}"><rect width="${size}" height="${size}" fill="#fff"/><path fill="#A50021" d="${parts.join('')}"/></svg>`;
 }
 
 function setMessage(key, isError = false) {
@@ -198,7 +198,7 @@ pngButton.addEventListener('click', () => {
   }
   context.fillStyle = '#ffffff';
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = '#172c26';
+  context.fillStyle = '#A50021';
   for (let y = 0; y < modules; y++) {
     for (let x = 0; x < modules; x++) {
       if (currentQr.isDark(y, x)) context.fillRect((x + margin) * cellSize, (y + margin) * cellSize, cellSize, cellSize);
