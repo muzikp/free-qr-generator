@@ -5,6 +5,11 @@ const preview = document.getElementById('preview');
 const badge = document.getElementById('result-badge');
 const pngButton = document.getElementById('download-png');
 const svgButton = document.getElementById('download-svg');
+const foregroundInput = document.getElementById('foreground-color');
+const backgroundInput = document.getElementById('background-color');
+const foregroundValue = document.getElementById('foreground-value');
+const backgroundValue = document.getElementById('background-value');
+const colorHint = document.getElementById('color-hint');
 const languageButtons = document.querySelectorAll('.language-button');
 
 const translations = {
@@ -16,6 +21,8 @@ const translations = {
     generatorLabel: 'Generátor QR kódu', stepOne: 'VLOŽ ODKAZ', formHeading: 'Kam má QR kód vést?',
     formCopy: 'Zadej adresu webu, kterou chceš sdílet.', urlLabel: 'URL adresa', urlPlaceholder: 'např. https://moje-stranka.cz',
     inputHint: 'Adresu můžeš zadat i bez https://', generate: 'Vygenerovat QR kód',
+    colorsHeading: 'BARVY QR KÓDU', foregroundLabel: 'Čtverečky', backgroundLabel: 'Pozadí',
+    colorHint: 'Pro snadné načtení zvol kontrastní barvy.', lowContrast: 'Tyto barvy mohou zhoršit čitelnost QR kódu.',
     privacy: 'Tvůj odkaz se zpracuje přímo v prohlížeči.', stepTwo: 'TVŮJ QR KÓD', previewLabel: 'Náhled QR kódu',
     emptyState: 'Tady se objeví tvůj QR kód', downloadAs: 'STÁHNOUT JAKO',
     formatNote: 'PNG pro běžné použití · SVG pro tisk a škálování',
@@ -35,6 +42,8 @@ const translations = {
     generatorLabel: 'QR code generator', stepOne: 'PASTE A LINK', formHeading: 'Where should your QR code lead?',
     formCopy: 'Enter the website address you want to share.', urlLabel: 'URL address', urlPlaceholder: 'e.g. https://your-website.com',
     inputHint: 'You can enter the address without https://', generate: 'Generate QR code',
+    colorsHeading: 'QR CODE COLORS', foregroundLabel: 'Squares', backgroundLabel: 'Background',
+    colorHint: 'Choose contrasting colors for easy scanning.', lowContrast: 'These colors may make the QR code harder to scan.',
     privacy: 'Your link is processed directly in your browser.', stepTwo: 'YOUR QR CODE', previewLabel: 'QR code preview',
     emptyState: 'Your QR code will appear here', downloadAs: 'DOWNLOAD AS',
     formatNote: 'PNG for everyday use · SVG for print and scaling',
@@ -52,6 +61,7 @@ let currentQr = null;
 let currentSvg = '';
 let language = 'cs';
 let messageKey = '';
+let colorWarning = false;
 
 function t(key) { return translations[language][key]; }
 
@@ -73,6 +83,7 @@ function setLanguage(nextLanguage) {
   if (emptyLabel) emptyLabel.textContent = t('emptyState');
   if (currentQr) preview.querySelector('svg').setAttribute('aria-label', t('qrLabel'));
   message.textContent = messageKey ? t(messageKey) : '';
+  colorHint.textContent = t(colorWarning ? 'lowContrast' : 'colorHint');
   try { localStorage.setItem('qr-studio-language', language); } catch { /* Storage may be disabled. */ }
 }
 
@@ -114,8 +125,37 @@ function svgFromQr(qr) {
     }
   }
 
-  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" role="img" aria-label="${t('qrLabel')}"><rect width="${size}" height="${size}" fill="#fff"/><path fill="#A50021" d="${parts.join('')}"/></svg>`;
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges" role="img" aria-label="${t('qrLabel')}"><rect width="${size}" height="${size}" fill="${backgroundInput.value}"/><path fill="${foregroundInput.value}" d="${parts.join('')}"/></svg>`;
 }
+
+function colorLuminance(hex) {
+  const channels = [1, 3, 5].map((index) => parseInt(hex.slice(index, index + 2), 16) / 255);
+  return channels.map((channel) => channel <= 0.04045 ? channel / 12.92 : ((channel + 0.055) / 1.055) ** 2.4)
+    .reduce((sum, channel, index) => sum + channel * [0.2126, 0.7152, 0.0722][index], 0);
+}
+
+function updateColors() {
+  foregroundValue.textContent = foregroundInput.value.toUpperCase();
+  backgroundValue.textContent = backgroundInput.value.toUpperCase();
+  preview.style.setProperty('--qr-background', backgroundInput.value);
+  const foregroundLuminance = colorLuminance(foregroundInput.value);
+  const backgroundLuminance = colorLuminance(backgroundInput.value);
+  const ratio = (Math.max(foregroundLuminance, backgroundLuminance) + 0.05) /
+    (Math.min(foregroundLuminance, backgroundLuminance) + 0.05);
+  colorWarning = ratio < 4.5 || foregroundLuminance >= backgroundLuminance;
+  colorHint.textContent = t(colorWarning ? 'lowContrast' : 'colorHint');
+  colorHint.classList.toggle('is-warning', colorWarning);
+  if (currentQr) {
+    currentSvg = svgFromQr(currentQr);
+    preview.innerHTML = currentSvg;
+  }
+}
+
+[foregroundInput, backgroundInput].forEach((picker) => {
+  picker.addEventListener('input', updateColors);
+  picker.addEventListener('change', updateColors);
+});
+updateColors();
 
 function setMessage(key, isError = false) {
   messageKey = key;
@@ -196,9 +236,9 @@ pngButton.addEventListener('click', () => {
     setMessage('pngError', true);
     return;
   }
-  context.fillStyle = '#ffffff';
+  context.fillStyle = backgroundInput.value;
   context.fillRect(0, 0, canvas.width, canvas.height);
-  context.fillStyle = '#A50021';
+  context.fillStyle = foregroundInput.value;
   for (let y = 0; y < modules; y++) {
     for (let x = 0; x < modules; x++) {
       if (currentQr.isDark(y, x)) context.fillRect((x + margin) * cellSize, (y + margin) * cellSize, cellSize, cellSize);

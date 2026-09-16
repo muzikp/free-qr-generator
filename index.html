@@ -50,6 +50,20 @@
               </div>
               <p id="input-hint" class="input-hint" data-i18n="inputHint">Adresu můžeš zadat i bez https://</p>
               <p id="form-message" class="form-message" role="status" aria-live="polite"></p>
+              <fieldset class="color-editor">
+                <legend data-i18n="colorsHeading">BARVY QR KÓDU</legend>
+                <div class="color-controls">
+                  <label class="color-control" for="foreground-color">
+                    <span data-i18n="foregroundLabel">Čtverečky</span>
+                    <span class="color-choice"><input id="foreground-color" type="color" value="#a50021" /><span id="foreground-value" class="color-value">#A50021</span></span>
+                  </label>
+                  <label class="color-control" for="background-color">
+                    <span data-i18n="backgroundLabel">Pozadí</span>
+                    <span class="color-choice"><input id="background-color" type="color" value="#ffffff" /><span id="background-value" class="color-value">#FFFFFF</span></span>
+                  </label>
+                </div>
+                <p id="color-hint" class="color-hint" role="status" aria-live="polite" data-i18n="colorHint">Pro snadné načtení zvol kontrastní barvy.</p>
+              </fieldset>
               <button class="generate-button" type="submit">
                 <span data-i18n="generate">Vygenerovat QR kód</span>
                 <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>

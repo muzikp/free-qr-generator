@@ -1,6 +1,6 @@
 # QR Studio
 
-Statická jednostránková aplikace pro vytvoření QR kódu z webové adresy. Kód lze stáhnout jako PNG nebo SVG.
+Statická jednostránková aplikace pro vytvoření QR kódu z webové adresy. Barvy čtverečků i pozadí lze upravit a kód stáhnout jako PNG nebo SVG.
 
 Otevřete `index.html` v prohlížeči nebo složku nasaďte na libovolný statický hosting. Není potřeba build ani backend.
 
