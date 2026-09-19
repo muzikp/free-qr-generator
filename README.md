@@ -8,6 +8,8 @@ Otevřete `index.html` v prohlížeči nebo složku nasaďte na libovolný stati
 
 Výpočet QR kódu i export obrázků probíhá v prohlížeči. Při načtení stránky je potřeba připojení k internetu pro knihovnu [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) a webová písma.
 
+Počet návštěv měří Cloudflare Web Analytics pomocí beaconu bez cookies, analytického `localStorage` a profilování návštěvníků.
+
 Rozhraní lze přepnout mezi češtinou a angličtinou tlačítky v hlavičce. Volba jazyka se ukládá v prohlížeči.
 
 ## Nasazení na GitHub Pages
