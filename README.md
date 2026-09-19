@@ -2,7 +2,7 @@
 
 Statická jednostránková aplikace pro vytvoření QR kódu z webové adresy. Barvy čtverečků i pozadí lze upravit, kód stáhnout jako PNG nebo SVG a obrázek PNG zkopírovat do schránky v podporovaném prohlížeči přes HTTPS.
 
-Zvolené barvy a jazyk rozhraní se ukládají pouze lokálně v prohlížeči pomocí `localStorage`.
+Zvolené barvy a jazyk rozhraní se ukládají pouze lokálně v prohlížeči pomocí `localStorage`. Bez uložené volby se čeština použije pro prohlížeč s hlavním jazykem `cs`, ostatní návštěvníci dostanou angličtinu.
 
 Otevřete `index.html` v prohlížeči nebo složku nasaďte na libovolný statický hosting. Není potřeba build ani backend.
 

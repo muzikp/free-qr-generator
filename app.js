@@ -122,8 +122,18 @@ function setLanguage(nextLanguage) {
   try { localStorage.setItem('qr-studio-language', language); } catch { /* Storage may be disabled. */ }
 }
 
+function getInitialLanguage() {
+  try {
+    const savedLanguage = localStorage.getItem('qr-studio-language');
+    if (savedLanguage === 'cs' || savedLanguage === 'en') return savedLanguage;
+  } catch { /* Storage may be disabled. */ }
+
+  const browserLanguage = navigator.languages?.[0] || navigator.language || '';
+  return browserLanguage.toLowerCase().startsWith('cs') ? 'cs' : 'en';
+}
+
 languageButtons.forEach((button) => button.addEventListener('click', () => setLanguage(button.dataset.lang)));
-try { setLanguage(localStorage.getItem('qr-studio-language') || 'cs'); } catch { setLanguage('cs'); }
+setLanguage(getInitialLanguage());
 
 document.getElementById('year').textContent = new Date().getFullYear();
 
