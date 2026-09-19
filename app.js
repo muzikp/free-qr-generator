@@ -72,6 +72,31 @@ let messageKey = '';
 let copyMessageKey = '';
 let colorWarning = false;
 
+const COLOR_STORAGE_KEYS = {
+  foreground: 'qr-studio-foreground-color',
+  background: 'qr-studio-background-color'
+};
+
+function isHexColor(value) {
+  return /^#[0-9a-f]{6}$/i.test(value || '');
+}
+
+function loadSavedColors() {
+  try {
+    const foreground = localStorage.getItem(COLOR_STORAGE_KEYS.foreground);
+    const background = localStorage.getItem(COLOR_STORAGE_KEYS.background);
+    if (isHexColor(foreground)) foregroundInput.value = foreground;
+    if (isHexColor(background)) backgroundInput.value = background;
+  } catch { /* Storage may be disabled. */ }
+}
+
+function saveColors() {
+  try {
+    localStorage.setItem(COLOR_STORAGE_KEYS.foreground, foregroundInput.value);
+    localStorage.setItem(COLOR_STORAGE_KEYS.background, backgroundInput.value);
+  } catch { /* Storage may be disabled. */ }
+}
+
 function t(key) { return translations[language][key]; }
 
 function setLanguage(nextLanguage) {
@@ -155,6 +180,7 @@ function updateColors() {
   colorWarning = ratio < 4.5 || foregroundLuminance >= backgroundLuminance;
   colorHint.textContent = t(colorWarning ? 'lowContrast' : 'colorHint');
   colorHint.classList.toggle('is-warning', colorWarning);
+  saveColors();
   if (currentQr) {
     currentSvg = svgFromQr(currentQr);
     preview.innerHTML = currentSvg;
@@ -166,6 +192,7 @@ function updateColors() {
   picker.addEventListener('input', updateColors);
   picker.addEventListener('change', updateColors);
 });
+loadSavedColors();
 updateColors();
 
 function setMessage(key, isError = false) {

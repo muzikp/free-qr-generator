@@ -2,6 +2,8 @@
 
 Statická jednostránková aplikace pro vytvoření QR kódu z webové adresy. Barvy čtverečků i pozadí lze upravit, kód stáhnout jako PNG nebo SVG a obrázek PNG zkopírovat do schránky v podporovaném prohlížeči přes HTTPS.
 
+Zvolené barvy a jazyk rozhraní se ukládají pouze lokálně v prohlížeči pomocí `localStorage`.
+
 Otevřete `index.html` v prohlížeči nebo složku nasaďte na libovolný statický hosting. Není potřeba build ani backend.
 
 Výpočet QR kódu i export obrázků probíhá v prohlížeči. Při načtení stránky je potřeba připojení k internetu pro knihovnu [qrcode-generator](https://github.com/kazuhikoarase/qrcode-generator) a webová písma.
